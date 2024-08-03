@@ -2,7 +2,7 @@
 
 ## Overview
 
-The test task involves creating a test automation framework to cover the following UI scenario for test website [Soucedemo]([https://www.saucedemo.com/):
+The test task involves creating a test automation framework to cover the following UI scenario for test website [Saucedemo](https://www.saucedemo.com/)
 
 1. Login Successful(Standard User)
 2. Login Unsuccessful (locked_out_user)
