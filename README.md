@@ -21,55 +21,31 @@ The following technologies are utilized:
 
 The project is organized into the following packages:
 
-saucedemoTestAutomation
-│
-├── src
-│   ├── main
-│   │   └── java
-│   │       └── base
-│   │       │   └── PageBase.java
-│   │       └── pages
-│   │           ├── CartPage.java
-│   │           ├── CheckoutPage.java
-│   │           ├── CompletePage.java
-│   │           ├── LoginPage.java
-│   │           ├── OverviewPage.java
-│   │           └── ProductsPage.java
-│   └── test
-│       └── java
-│           └── base
-│           │   └── BaseTest.java
-│           └── tests
-│                ├── CartAndCheckoutTest.java
-│                ├── LoginTest.java
-│                └── ProductSortingTest.java
-├── pom.xml
-└── README.md
+## Main/base
 
-# Main/base
+Contains the `PageBase` class which provides common methods for all page classes.
 
-Contains the PageBase class which provides common methods for all page classes.
-
-# Main/pages
+## Main/pages
 
 Contains the following page classes, each with their properties and methods:
 
-CartPage.java
-CheckoutPage.java
-CompletePage.java
-LoginPage.java
-OverviewPage.java
-ProductsPage.java
+- `CartPage.java`
+- `CheckoutPage.java`
+- `CompletePage.java`
+- `LoginPage.java`
+- `OverviewPage.java`
+- `ProductsPage.java`
 
-# Test/base
+## Test/base
 
 Then I've created the `BaseTest` class in the test package to set up common configurations and to initialize `baseUrl` there.
 
-# Test/tests
+## Test/tests
 
 Divided into three test classes to handle different test scenarios:
 
-CartAndCheckoutTest.java
-LoginTest.java
-ProductSortingTest.java
+- `CartAndCheckoutTest.java`
+- `LoginTest.java`
+- `ProductSortingTest.java`
 
+#
