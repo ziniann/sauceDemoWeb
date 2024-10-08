@@ -1,32 +1,53 @@
 package pages;
 
 import base.PageBase;
-import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import java.time.Duration;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class LoginPage extends PageBase {
+    WebDriver driver;
 
-    private static SelenideElement usernameField = $("#user-name");
-    private static SelenideElement passwordField = $("#password");
-    private static SelenideElement loginButton = $("#login-button");
-    private static SelenideElement errorMessageContainer = $(".error-message-container");
+    private By usernameField = By.id("user-name");
+    private By passwordField = By.id("password");
+    private By loginButton = By.id("login-button");
+    private By errorMessage = By.cssSelector(".error-message-container");
+
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+    }
 
     @Override
-    public void init() {
-        usernameField.shouldBe(visible);
+    public LoginPage init() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement loginBtn = wait.until(visibilityOfElementLocated(loginButton));
+        if (!loginBtn.isDisplayed()) {
+            throw new IllegalStateException("Login page is not loaded properly.");
+        }
+        return this;
     }
 
-    public static void login(String username, String password) {
-        usernameField.setValue(username);
-        passwordField.setValue(password);
-        loginButton.click();
+    // Methods to interact with login page
+    public void enterUsername(String username) {
+        driver.findElement(usernameField).sendKeys(username);
     }
 
-    public static void checkErrorMessage(String errorText) {
-        errorMessageContainer.shouldHave(text(errorText));
+    public void enterPassword(String password) {
+        driver.findElement(passwordField).sendKeys(password);
+    }
+
+    public void clickLoginButton() {
+        driver.findElement(loginButton).click();
+    }
+
+    public String getErrorMessage() {
+        return driver.findElement(errorMessage).getText();
     }
 
 }

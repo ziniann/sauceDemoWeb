@@ -1,29 +1,57 @@
 package tests;
 
-import base.BaseTest;
-import io.qameta.allure.TmsLink;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.LoginPage;
-import pages.ProductsPage;
+import utils.ConfigManager;
 
-import static pages.LoginPage.checkErrorMessage;
-import static pages.LoginPage.login;
+import java.time.Duration;
 
-public class LoginTest extends BaseTest {
+import static org.testng.Assert.assertTrue;
+
+public class LoginTest {
+    WebDriver driver;
+    LoginPage loginPage;
+
+    @BeforeMethod
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.get(ConfigManager.getProperty("url"));
+
+        loginPage = new LoginPage(driver).init();
+    }
 
     @Test(description = "Logging in with the valid user's credentials")
-    @TmsLink("01")
-    public void loginSuccessful() {
-        new LoginPage().init();
-        login("standard_user", "secret_sauce");
-        new ProductsPage().init();
+    public void verifySuccessfulLogin() {
+        loginPage.enterUsername(ConfigManager.getProperty("username"));
+        loginPage.enterPassword(ConfigManager.getProperty("password"));
+        loginPage.clickLoginButton();
+
+        assertTrue(driver.getCurrentUrl().contains("inventory.html"),
+                "Login was not successful. Expected to be on inventory page.");
     }
 
     @Test(description = "Logging in with the locked out user's credentials")
-    @TmsLink("02")
-    public void loginUnsuccessful() {
-        new LoginPage().init();
-        login("locked_out_user", "secret_sauce");
-        checkErrorMessage("Epic sadface: Sorry, this user has been locked out.");
+    public void verifyLoginFailureWithIncorrectCredentials() {
+        loginPage.enterUsername(ConfigManager.getProperty("username"));
+        loginPage.enterPassword(ConfigManager.getProperty("incorrect_password"));
+        loginPage.clickLoginButton();
+
+        assertTrue(loginPage.getErrorMessage().contains("Epic sadface"),
+                "Expected error message was not displayed for incorrect credentials.");
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        driver.quit();
     }
 }
+
+
